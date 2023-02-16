@@ -1,0 +1,15 @@
+@import "@fontsource/roboto/300.css";
+@import "@fontsource/roboto/400.css";
+@import "@fontsource/roboto/500.css";
+@import "@fontsource/roboto/700.css";
+
+html {
+  font-size: 1rem;
+  font-weight: 400;
+  font-family: "Roboto", serif;
+  overscroll-behavior-y: none;
+}
+
+body {
+  margin: 0;
+}
