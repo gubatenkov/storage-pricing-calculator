@@ -12,7 +12,7 @@ const options = {
       display: false,
     },
     legend: {
-      position: "unset",
+      display: false,
     },
   },
 };

@@ -7,13 +7,14 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { Bar } from "react-chartjs-2";
 import { useEffect, useMemo, useState } from "react";
 
 import { providersData } from "./data";
 import options from "./data/barChartOptions";
 import CustomLegend from "./components/Legend";
+import BarVertical from "./components/BarVertical";
 import CustomSlider from "./components/CustomSlider";
+import BarHorizontal from "./components/BarHorizontal";
 import getArrWithLowestBgColor from "./helpers/getArrWithLowestBgColor";
 import calculateProvidersPrices from "./helpers/calculateProvidersPrices";
 import getArrWithLowestBorderColor from "./helpers/getArrWithLowestBorderColor";
@@ -38,17 +39,15 @@ export default function App(props) {
   const [providersPrices, setProvidersPrices] = useState(
     calculateProvidersPrices(storageGB, transferGB, providers)
   );
-  const [barChartOptions, setBarChartOptions] = useState(options);
+  const [barType, setBarType] = useState(
+    window.innerWidth >= 1024 ? "horizontal" : "vertical"
+  );
 
   useEffect(() => {
-    setBarChartOptions((prev) => {
-      if (window.innerWidth - 64 >= 1024) {
-        prev.indexAxis = "y";
-      } else {
-        prev.indexAxis = "x";
-      }
-      return prev;
+    const listener = window.addEventListener("resize", () => {
+      setBarType(window.innerWidth >= 1024 ? "horizontal" : "vertical");
     });
+    return () => window.removeEventListener("resize", listener);
   }, []);
 
   useEffect(() => {
@@ -116,7 +115,11 @@ export default function App(props) {
 
           <div className="chart-box">
             <div className="bar-wrap">
-              <Bar options={barChartOptions} data={data} />
+              {barType === "horizontal" ? (
+                <BarHorizontal data={data} options={options} />
+              ) : (
+                <BarVertical data={data} options={options} />
+              )}
             </div>
             <CustomLegend
               items={providers}
